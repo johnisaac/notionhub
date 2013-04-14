@@ -1,0 +1,30 @@
+var related_questions_content = "";
+var related_questions = "";
+
+<%@related_questions.each_hit_with_result do|hit, question|%>
+	related_questions_content = related_questions_content + "<li class='first'><%=escape_javascript(link_to question.title, question_path(question.id),:target =>'_blank')%></li>";
+<%end%>
+
+<%if @related_questions.total > 0 %>
+	related_questions = "<ul id='related_questions' class='span-8 first'><span class='related_heading first'>Related Questions</span>"+
+							related_questions_content + "</ul>";
+<%end%>
+
+
+var related_links_content = "";
+var related_links = "";
+
+<%@related_links.each_hit_with_result do|hit, link|%>
+	<% if Integer(@link_id) != link.id%>
+		related_links_content = related_links_content + "<li class='first'><%=escape_javascript(link_to link.title, link_path(link.id))%></li>";
+	<%end%>
+<%end%>
+
+if ( related_links_content.length > 0 ){
+	<% if ( @related_links.total > 0 )%>
+		related_links = "<ul id='related_questions' class='span-8 first'><span class='related_heading first'>Related Links</span>"+
+						related_links_content+"</ul>";
+	<%end%>
+}
+
+$("sidebar").insert( { bottom: related_questions+related_links } );

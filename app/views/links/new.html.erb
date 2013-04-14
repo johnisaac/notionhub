@@ -1,0 +1,19 @@
+<h3 class="heading">Post Link</h3>
+<span class="dull">All the fields are required</span>
+
+<%=form_for(@link, :html => { :id => "post_new_link", :class => "span-15"} ) do|f|%>
+
+	<% if @link.errors.count > 0 %>
+		<ul id="errorExplanation" class="span-14">
+		<%@link.errors.each_pair do |msg|%>
+		<li class="error_message"> <%= "#{msg[0]}".camelize+" #{msg[1][0]}"%></li>
+		<%end%>
+		</ul>
+	<%end%>
+	
+	<%=f.label :title%>
+	<%=f.text_field :title, :size => "40px"%><br />
+	<%=f.label :URL, "URL"%>
+	<%=f.text_field :URL, :size => "50px"%><br />
+	<%=f.submit "   Post New Link   ", :class => "push-2"%>
+<%end%>

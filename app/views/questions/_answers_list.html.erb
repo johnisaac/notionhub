@@ -1,0 +1,41 @@
+<div id="answers_list" class="span-16 prepend-top">
+	
+	<%answers.each do|answer|%>
+	
+		<div class="answer" id="answer_<%=answer.id%>" class="span-16">
+			
+			<%=render :partial =>'ratings', :locals =>{ :kind => "answer", :object => answer }%>
+			
+			<span class="userbox span-15 last">
+				
+				<%if answer.user.photo.file?%>
+					<%=link_to image_tag(answer.user.photo.url(:small), :class=>'right'), show_profile_path(:id => answer.user_id), :style=>'position:relative; top:2px;'%>
+				<%else%>
+					<%=link_to image_tag("default_small.png"), show_profile_path(:id => answer.user_id),:class => "right last"%>
+				<%end%>
+
+				<%= link_to truncate(answer.user.name.titleize, :length => 18), show_profile_path(:id => answer.user_id) %>
+				<!-- Change this to such that it displays even if the user has not signed in and  -->
+
+				<%=render :partial=>"description", :locals => { :answer => answer}%>
+				
+			</span>
+			
+			<span class="span-14 content" style="word-wrap: break-word;">
+				<%=raw answer.content%>
+			</span>
+			
+			
+			<div class="comments_list span-16 left"> 
+				<%=render :partial=>'answer_comments', :locals => { :answer => answer }%>
+			</div>
+			
+			<%=hidden_field_tag "user_full_desc_"+answer.id.to_s, answer.user.description, :class => "full_desc"%>
+			
+			<hr class="span-16" />
+			
+		</div>
+		
+	<%end%>
+	
+</div>

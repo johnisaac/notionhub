@@ -1,0 +1,43 @@
+<h3 class="heading"><%=h @app.university%>'s Application</h3>
+
+<div id="show_application" class="span-8">	
+		<p class="detail">
+			<span class="title span-2">University</span>
+			<span class="value span-5"><%=h @app.university%></span>
+		</p>
+		<p class="detail">
+			<span class="title span-2">Major</span>
+			<span class="value span-5"><%=h @app.department%></span>
+		</p>
+		<p class="detail">
+			<span class="title span-2">Degree</span>
+			<span class="value span-5"><%=h degree_value(@app.degree) %></span>
+		</p>
+		<p class="detail">
+			<span class="title span-2">Deadline</span>
+			<span class="value span-5"><%=h app_deadline(@app.deadline)%></span>
+		</p>
+		<p class="detail">
+			<span class="title span-2">Status</span>
+			<span class="value span-5"><%=h status_value(@app.status)%></span>
+		</p>	
+		<p class='span-7 detail'>
+				<%=h link_to "Edit Application", edit_app_path(@app.id), html_options ={ :id => :submit_edit_app }%>
+<%=h link_to "Delete Application", app_path(@app.id), html_options ={ :method => :delete, :confirm => "Do you really want to delete this app?",:id => :delete_app}%>
+		</p>			
+</div>
+
+<div id="updates">
+	<%= render :partial => 'new_update', :locals => { :app_id => @app.id }%>
+	<ul id="app_updates" class="right">
+		<%@updates.each do|update|%>	
+			<li class="update notice right"><%=h update.content%></li>
+		<%end%>
+	</ul>
+</div>
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag "show_app.js" %>
+<%end%>
+

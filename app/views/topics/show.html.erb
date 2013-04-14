@@ -1,0 +1,17 @@
+<div id="topic_detail" class="span-16">
+	Topic
+</div>
+<%=hidden_field_tag :topic_id, @topic.id%>
+<%@topic_questions.each do|topic_question|%>
+	<%question = Question.find(topic_question.question_id)%>
+	<% if !question.nil? %>
+		<%=link_to question.title,question_url(question.id)%>
+	<% else %>
+		<%="nil"%>
+	<% end %>
+<%end%>
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag "topics.js" %>
+<%end%>

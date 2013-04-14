@@ -1,0 +1,36 @@
+<%=render :partial=>'question_content', :locals => { :question => @question }%>
+
+<div id="answers_detail" class="span-16">
+	
+	<span id='answer_count' class='left span-3 last'>
+		<%=@question.answers.count%> Answers
+	</span>
+
+	<%=render :partial=>'answers_list', :locals => { :answers => @question.answers }%>
+	
+	<% if @already_answered == false && user_signed_in? %>
+		<div id='answer_div' class='span-15 push-1 prepend-top'>
+			<label id="post_your_answer">Post Your Answer</label>
+			<textarea id='answer' rows='25' cols='10' class='span-15 mceEditor'></textarea><br/>
+			<input type=button id='submit_answer' value='Post Your Answer' class='left' />&nbsp;&nbsp;&nbsp;&nbsp;
+			<span id='char_left' class='push-7'>enter at least 15 characters</span>
+			<br/><br/>
+		</div>
+	<%elsif user_signed_in? && @already_answered == true%>
+		<div id="answer_banner" class="span-15"> 
+			<span id="banner_content" class="span-14 push-1">
+				You have already answered this question. You can edit your answer anytime.
+			</span
+		</div>
+	<%end%>
+
+</div>
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag "show_question.js" %>
+
+	<%= include_tiny_mce_if_needed %>
+		
+<%end%>
+

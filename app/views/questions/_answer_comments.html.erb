@@ -1,0 +1,74 @@
+<% if answer.a_comments.count > 0 %>
+	<%=link_to "#{answer.a_comments.count} Comment".pluralize(),"#", :class => "show_comments prepend-1" %>
+	
+	<span class='time_ago' style='padding-left:5px;'>
+		<%=" - #{date_name(answer.updated_at)}"%>
+	</span>
+
+	<%if user_signed_in? && answer.user_id == current_user.id%>
+		<%@already_answered = true%>
+		
+		<span class="right last">					
+			<%=link_to image_tag("edit.png", :title => 'Edit this answer'),"#", html_options = { :class => "edit_answer" }%>
+			<%=link_to image_tag("delete.png", :title => 'Delete this answer'),"#", html_options = { :class => "delete_answer" } %>
+		</span>
+		
+	<%end%>
+	
+	<span class="comments span-15" style="display:none;">
+		
+		<%answer.a_comments.each do|comment|%>
+			<span id="comment_<%=comment.id%>" class="comment span-14 push-1">
+				
+				<span class="comment_content span-13">
+					<%=comment.content%>
+				</span>
+				
+				<%= link_to User.find(comment.user_id).name, show_profile_path(:id => comment.user_id), :class => "comment_user"%>
+				
+				<span class="comment_date">
+					<%= " - #{date_name(comment.created_at)}"%>
+				</span>
+				
+			</span>
+		<%end%>
+		
+	</span>
+	
+	<%if user_signed_in?%>
+		<span class='span-15 comment_span push-1' style="display:none;">
+			<textarea class='comment_box span-10 push-1' style='height:70px'></textarea>									    		
+			<input type=button class='submit_comment push-1' value='   Comment   ' />
+	    </span>
+	<%end%>
+	
+<%elsif user_signed_in?%>
+	<%= link_to "Add Comment", "#", :class => "add_comment prepend-1"%>
+	
+	<span class='time_ago' style='padding-left:5px;'>
+		<%=" - #{date_name(answer.updated_at)}"%>
+	</span>
+	
+	<%if user_signed_in? && answer.user_id == current_user.id%>
+		<%@already_answered = true%>
+		
+		<span class="right last">					
+			<%=link_to image_tag("edit.png", :title => 'Edit this answer'),"#", html_options = { :class => "edit_answer" }%>
+			<%=link_to image_tag("delete.png", :title => 'Delete this answer'),"#", html_options = { :class => "delete_answer" } %>
+		</span>
+		
+	<%end%>
+	
+	<span class="comments span-15" style="display:none;">
+	</span>
+	
+	<span class='span-15 comment_span push-1' style="display:none;">
+		<textarea class='comment_box span-10 push-1' style='height:70px'>
+		</textarea>									    		
+		<input type=button class='submit_comment push-1' value='    Comment   ' />
+    </span>
+<%else%>
+	<span class='push-1 time_ago' style='padding-left:5px;'>
+		<%="#{date_name(answer.updated_at)}"%>
+	</span>
+<%end%>

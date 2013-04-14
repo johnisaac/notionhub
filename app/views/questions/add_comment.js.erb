@@ -1,0 +1,20 @@
+var comments_span ="<span class='comment span-14 push-1' id=comment_"+<%=@comment.id%>+">"+
+						"<span class='comment_content span-13'><%=escape_javascript(@comment.content)%></span>"+
+						 "<%=escape_javascript(link_to User.find(@comment.user_id).name, show_profile_path(:id => @comment.user_id), :class =>'comment_user') %>"+
+						"<span class='comment_date'> - <%=escape_javascript(date_name(@comment.created_at))%></span></span>";
+
+<% if ( @answer_comment_count == 1 )%>
+	$$("#answer_"+<%=@comment.answer_id%>+"> div.comments_list > span.comments")[0].insert( { bottom: comments_span} );
+	$$("#answer_"+<%=@comment.answer_id%>+"  div.comments_list")[0].down("a.add_comment").update("1 Comment");
+	new Effect.Highlight($("comment_"+<%=@comment.id%>));
+
+	$$("#answer_"+<%=@comment.answer_id%>+"> div.comments_list")[0].down("a.add_comment").addClassName("show_comments");
+	$$("#answer_"+<%=@comment.answer_id%>+"> div.comments_list")[0].down("a.add_comment").removeClassName("add_comment");
+
+	new Effect.Highlight($$("#answer_"+<%=@comment.answer_id%>+"  div.comments_list")[0].down(3));
+<% else %>
+	$$("#answer_"+<%=@comment.answer_id%>+"> div.comments_list > span.comments")[0].insert( { bottom: comments_span} );	
+	$$("#answer_"+<%=@comment.answer_id%>+"  div.comments_list")[0].down("a.show_comments").update(<%=@answer_comment_count%>+" Comments");
+	new Effect.Highlight($("comment_"+<%=@comment.id%>));
+<% end %>
+new Effect.Highlight($$("#answer_"+<%=@comment.answer_id%>+"  div.comments_list")[0].down("a.show_comments"));

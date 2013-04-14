@@ -1,0 +1,9 @@
+var questions_list = "";
+<%@questions.each do|question|%>
+	questions_list = questions_list + "<li id=question_"+<%=question.id%>+" class='question span-15'>"+
+					 "<%=escape_javascript( link_to question.title,question_path(question.id), :class=>'q_title span-15 left')%><br />"+
+					 "<span class='q_answers right'>"+<%=question.answers.count%>+" Answers </span>"+
+					 "<span class='q_time_ago left'><%=date_name(question.created_at)%></span>"+
+					 "</li>";
+<%end%>	
+$("user_questions").update(questions_list);

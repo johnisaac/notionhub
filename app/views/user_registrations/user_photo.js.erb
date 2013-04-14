@@ -1,0 +1,33 @@
+var photo_div = "<div class='span-8 rounded-corners' id='new_photo'>"+
+					"<div class='span-7'>";
+
+<% if !current_user.photo.file? %>
+	photo_div = photo_div +	"<%=escape_javascript(image_tag('default.jpg', :class=>'prepend-top push-1 span-6'))%>";
+<% else %>
+	photo_div = photo_div +	"<%=escape_javascript(image_tag(current_user.photo.url(:big), :class=>'prepend-top push-1 span-6'))%>";
+<%end%>
+
+photo_div = photo_div +	"<form enctype='multipart/form-data' method='post' id='new_photo_upload' name='new_photo_upload' action='/user_registrations/upload_photo'>"+
+							"<%=escape_javascript(token_tag())%>"+
+							"<input type='file' accept='image/jpg, image/jpeg, image/tiff, image.png ,image/gif' id='user_photo' name='user[photo]' class='push-1 span-6'/>"+
+							"<span class='span-7 notice' style='margin-left:8px;'> Only JPEG, PNG, GIF, TIFF file formats are supported</span>"+
+							"<input type='submit' name='commit' id='user_submit' value='Upload Photo' class='push-2' />"+
+							"<a href='#' id='hide_photo' class='push-2'>Cancel</a>"+
+						"</form>"+
+					"</div>"+
+				"</div>";
+
+if ( $("new_photo") === null ){
+	$("profile").insert({bottom:photo_div});
+}
+
+$('new_photo_upload').observe('submit', function(event){
+	if ( ( $("user_photo").getValue() === null )|| ( $("user_photo").getValue().length <=0 ) ) {
+		event.stop();
+	}
+});
+
+$('hide_photo').observe("click", function(event){
+	$('new_photo').remove();
+	event.stop();
+});

@@ -1,0 +1,17 @@
+embed_assets: on
+javascript_compressor: yui
+
+javascripts:
+    my_default:
+        - public/javascripts/prototype.js
+        - public/javascripts/effects.js
+        - public/javascripts/controls.js
+        - public/javascripts/rails.js
+        - public/javascripts/application.js
+        - public/javascripts/feedback.js
+        
+stylesheets:
+    my_default:
+        - public/stylesheets/blueprint/screen.css
+        - public/stylesheets/blueprint/print.css
+        - public/stylesheets/application.css

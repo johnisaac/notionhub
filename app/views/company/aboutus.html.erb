@@ -1,0 +1,40 @@
+
+<h2> About Us </h2>
+<div id="aboutus">
+	NotionHub is an aspiring student community where users can ask their questions about higher studies and get answers from other users, post links which you found useful while preparing for an exam. NotionHub also provides a tool to manage, track your applications.
+</div>
+<div id="about_menu"  class="span-15">
+	<a href="#" id="app_about_link" class="about">
+		Applications
+	</a>	
+	<a  href="#" id="qanda_about_link" class="about">
+		Q & A
+	</a>
+	<a href="#"  id="link_about_link" class="about">
+		Links
+	</a>
+</div>
+<div id="app_about" class="span-15">
+	Students usually apply to a number of universities and have to track lots of information ranging from application deadline to letter of recommendation package number. Apps helps you  
+	<ul>
+		<li>to maintain their application to universities,</li>
+		<li>track their application by adding updates and important application specific information</li>
+		<li>and also get timely reminders about the application deadlines.</li>
+	</ul>
+</div>
+
+<div id="qanda_about" class="span-15">
+	Every aspiring student has so many unique questions to ask and you can ask those questions here. Your questions will get accurate answers and also help other students who have the same questions. Questions is a
+	<ul>
+		<li> forum where you can ask questions about your higher studies, whether it is about the university you want to join, qualitative exam(GRE, GMAT, CAT etc) information etc.</li>
+		<li> answers other questions and add comments to answers</li>
+	</ul>
+</div>
+
+<div id="links_about" class="span-15">
+	We find so much useful information like model question papers, exam preparation tips, you can use this space to share and also save useful links. You can see other members links too, so you can have access to a whole range of new links. You can even add comments to links.
+</div>
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+	<%=javascript_include_tag "aboutus.js" %>
+<% end %>

@@ -1,0 +1,5 @@
+<% if @userquestion.flagged == 2%>
+	$("flag").replace("<span class='flagged'>You have flagged this question</span>");
+<% elsif @userquestion.flagged == 1%>
+	$("flag").replace("<span class='flagged'>You have unflagged this question</span>");
+<%end%>

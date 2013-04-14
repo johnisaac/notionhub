@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NotionHub - Topics</title>
+  <%= stylesheet_link_tag "blueprint/screen.css",html_options = Hash["media","screen"]%>
+  <%= stylesheet_link_tag "blueprint/print.css", html_options = Hash["media","print"] %>
+  <!--[if lt IE 8]>
+	<link rel="stylesheet" type="text/css" href="stylesheets/blueprint/ie.css" />
+  <![endif]-->
+  <%= stylesheet_link_tag "application.css"%>
+  <link rel="shortcut icon" href="/images/favicon.ico" />
+  <%= csrf_meta_tag %>
+</head>
+
+<body>
+	
+	<div id="header">
+		
+		<div class='container'>
+			
+			<div id='upper_header' class='span-24'>
+				
+				<%=link_to "NOTION HUB", root_path, :id =>"logo",:class => 'span-10 left'%>
+				
+				<span class='span-14' style='margin-right:0px;'>
+					<%=link_to "Search","#", :id => :search_button, :class =>"right"%>
+					<%=text_field_tag :query, nil, :class => "right span-10"%>
+				</span>
+				
+				<div id='tagline' class='span-10 left'>
+					everything about higher education!
+				</div>
+				
+				<%=render './layouts/nav_links', :locals => { :request => request }%>	
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<div class="container prepend-top">
+			
+			<div id="content" class="span-16 first">
+				<%=yield%>
+			</div>
+			
+			
+			<div id='sidebar' class='span-8 last'>
+				
+				<% if user_signed_in? %>
+					<%=render :partial => "./layouts/create_content"%>
+				<% end %>	
+				
+				<% if request.fullpath =~ /questions\/\d+$/i %>
+					<% if @flagged.nil? || @flagged.follow.nil? || @flagged.follow == false%>
+						<%=link_to "Follow Question","#", :id => "follow_question", :class=>"rounded-corners"%>
+					<%else%>
+						<%=link_to "Unfollow Question","#", :id => "unfollow_question", :class=>"rounded-corners"%>
+					<%end%>
+				<% end %>			
+				
+			</div>
+	</div>
+</body>
+</html>

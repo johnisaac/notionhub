@@ -1,0 +1,35 @@
+<div id="nav_header" class='span-24'>
+	
+	<!--
+	<% if request.fullpath =="/" %>
+		<%=link_to "Home",root_path, :class=>"span-2 current"%>
+	<% else %>
+		<%=link_to "Home",root_path, :class=>"span-2 nav_link"%>
+	<% end %>
+	-->				
+	
+	<% if request.fullpath =~/questions/i || request.fullpath =="/" %>
+		<%=link_to "Questions",questions_path, :class=>"span-3 current"%>
+	<% else %>
+		<%=link_to "Questions",questions_path, :class=>"span-3 nav_link"%>
+	<% end %>
+	
+	<% if request.fullpath =~/links/i %>
+		<%=link_to "Links",links_path, :class=>"span-2 current"%>
+	<% else %>
+		<%=link_to "Links",links_path, :class=>"span-2 nav_link"%>
+	<% end %>
+	
+	<% if request.fullpath =~/apps/i %>
+		<%=link_to "Applications",apps_path, :class=>"span-4 current"%>
+	<% else %>
+		<%=link_to "Applications",apps_path, :class=>"span-4 nav_link"%>
+	<% end %>
+	
+	<% if !user_signed_in? %>	
+		<%=render "./user_registrations/login_user_list"%>
+	<%else%>
+		<%=render "./user_registrations/current_user_list"%>
+	<%end%>
+	
+</div>

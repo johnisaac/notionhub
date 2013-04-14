@@ -1,0 +1,127 @@
+var content = "<div class='answer' id=answer_"+<%=@answer.id%>+" class='span-16'>"+
+				"<table class='rating span-1' cellpadding='0' cellspacing='0'>"+
+				"<tr><td><%= escape_javascript(link_to (image_tag 'up.png', options =  { :title => 'You cannot vote for your answer',:class=>'left span-1 owner' }), '#')%></td></tr>"+
+				"<tr><td class='answer_rating' style='padding-left:10px;font-weight:bold;'>"+<%=@answer.rating%>+"</td></tr>"+
+				"<tr><td><%= escape_javascript(link_to (image_tag 'down.png', options =  { :title => 'You cannot vote for your answer',:class=>'left span-1 owner' }), '#')%></td></tr>"+
+				"</table><span class='userbox span-15 last'>";
+				
+<%if @answer.user.photo.file?%>
+	content = content + "<%=escape_javascript(link_to image_tag(@answer.user.photo.url(:small), :class=>'right last'), show_profile_path(:id => @answer.user_id))%>";
+<%else%>
+	content = content + "<%=escape_javascript(link_to image_tag('default_small.png',:class=>'right last'), show_profile_path(:id => @answer.user_id))%>";
+<%end%>
+
+content = content + "<%=escape_javascript(link_to truncate(@answer.user.name.titleize, :length => 18), show_profile_path(:id => @answer.user_id))%>";
+
+<% if !@answer.user.description.blank?%>
+	content= content + "<span class='description'><%=escape_javascript(truncate(@answer.user.description, :length=>20))%></span>"+
+		"<%=escape_javascript(link_to 'Edit Bio','#', :class => 'edit_desc')%>";
+<%else%>
+	content= content + "<span class='description'><%=escape_javascript(truncate(@answer.user.description, :length=>20))%></span>"+
+		"<%=escape_javascript(link_to 'Add Bio','#', :class => 'add_desc')%>";
+<%end%>
+
+content = content + "</span>"+
+				"<span class='span-14 content' style='word-wrap: break-word;'>"+
+					"<%=escape_javascript(raw @answer.content)%>"+
+				"</span>"+
+				"<div class='comments_list span-16 left'>"+
+					"<a href='#' class='add_comment prepend-1'>Add Comment</a>"+
+					"<span class='time_ago' style='padding-left:5px;'> - <%=escape_javascript(date_name(@answer.updated_at))%></span>"+
+					"<span class='right last'>"+
+						"<a href='#' class='edit_answer'><%=escape_javascript(image_tag 'edit.png', :title=>'Edit this answer')%></a>&nbsp;"+
+						"<a href='#' class='delete_answer' data-confirm='Are you sure?' data-method='delete' rel='nofollow'><%=escape_javascript(image_tag 'delete.png', :title=>'Delete this answer')%></a>"+
+					"</span>"+
+					"<span class='comments span-15' style='display:none;'>"+
+					"</span>"+
+					"<span class='span-15 comment_span push-1' style='display:none;'>"+
+						"<textarea class='comment_box span-10 push-1' style='height:70px'></textarea>"+									    		
+						"<input type=button class='submit_comment push-1' value='Comment' />"+
+		    		"</span>"+
+				"</div>"+
+				"<%=escape_javascript(hidden_field_tag("",User.find(@answer.user_id).description, :class=>'full_desc'))%>"+
+			  "</div>";
+
+$("answer_count").update("<%=escape_javascript(@answers_count) %> Answers");		
+
+$("answers_list").insert({ bottom:content });
+var ans_banner = "<div id='answer_banner' class='span-15'><hr />"+
+				 "<span id='banner_content' class='span-13 push-1'>You have already answered this question. You can edit your answer anytime.</span>"+
+				 "</div>";
+				
+$("answer_div").replace(ans_banner);
+
+new Effect.Highlight($$("#answer_"+<%=@answer.id%>+" span.content")[0]);
+
+$$(".edit_answer").each(function(element){
+	question.edit_answer(element);
+	$(element).observe("mouseover", function(event){
+		var edit_answer_help = "<span class='span-3 show_edit_answer rounded-corners' style='text-decoration:none;'>edit your answer</span>";
+		if ( $(event.element()).up(0).down(".show_edit_answer") == undefined ){
+			$(event.element().up(0)).insert({top:edit_answer_help});
+		}
+	});
+	
+	$(element).observe("mouseout", function(event){
+		if ( $(event.element()).up(0).down(".show_edit_answer") != undefined ){
+			$(event.element()).up(0).down(".show_edit_answer").remove();
+		}
+	});
+});
+
+$$(".delete_answer").each(function(element){
+	question.delete_answer(element);
+	$(element).observe("mouseover", function(event){
+		var delete_answer_help = "<span class='span-3 show_delete_answer rounded-corners' style='text-decoration:none;'>delete your answer</span>";
+		if ( $(event.element()).up(0).down(".show_delete_answer") == undefined ){
+			$(event.element().up(0)).insert({top:delete_answer_help});
+		}
+	});
+	
+	$(element).observe("mouseout", function(event){
+		if ( $(event.element()).up(0).down(".show_delete_answer") != undefined ){
+			$(event.element()).up(0).down(".show_delete_answer").remove();
+		}
+	});
+});
+
+$$(".submit_comment").each(function(element){
+	question.submit_comment(element)
+});
+
+$$(".add_comment").each(function(element){
+	question.add_comment(element)
+});
+
+$$("#answer_"+<%=@answer.id%>+" .owner").each(function(b) {
+	$(b).observe("click", function(event){
+		var msg = "<div class='errorMessage span-7' style='position:absolute;padding-left:10px;z-index:1000;'> You cannot vote for your own question.<br/><a href='#' class='close'> Click on the box to close</a></div>";
+    	question.show_message(b,msg);
+		$$(".close").each(function(element){
+			question.hide_message(element)
+		});
+		event.stop();
+	});
+});
+
+$$("span.description").each(function(element){
+	if( $(element).innerHTML.strip().length > 0 ){
+		$(element).observe('mouseout', function(event){
+			question.hide_description(element);
+			event.stop();
+		});
+	
+		$(element).observe('mouseover', function(event){
+			question.show_description(element);
+			event.stop();
+		});
+	}
+});
+
+$$("a.edit_desc").each(function(element){
+	question.edit_description(element);
+});
+
+$$("a.add_desc").each(function(element){
+	question.edit_description(element);
+});

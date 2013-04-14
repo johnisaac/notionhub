@@ -1,0 +1,15 @@
+<% if !answer.user.description.blank?%>
+	<span class="description">
+		<%="#{ truncate(answer.user.description, :length=>20)}"%>
+	</span>
+	<% if user_signed_in? && answer.user_id == current_user.id %>
+		<%=link_to "Edit Bio","#", :class => "edit_desc"%>
+	<% end %>
+<%else%>
+	<span class="description">
+		<%="#{ truncate(answer.user.description, :length=>20)}"%>
+	</span>
+	<% if user_signed_in? && answer.user_id == current_user.id %>
+		<%=link_to "Add Bio","#", :class => "add_desc"%>
+	<% end %>
+<%end%>

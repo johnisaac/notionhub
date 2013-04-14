@@ -1,0 +1,14 @@
+
+
+<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :id => :password_reset}) do |f| %>
+  <h3>Forgot your password?</h3>
+  <%= devise_error_messages! %>
+
+  <p><%= f.label :email %>
+  <%= f.text_field :email,:style => "height:20px;" %></p>
+
+  <p><%= f.submit "Send me reset password instructions" %></p>
+<% end %>
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+<%end%>

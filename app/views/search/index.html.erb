@@ -1,0 +1,60 @@
+<h3>Search results for <i><%=@query%> </i></h3>
+<div id="results_tab" class="span-14 append-1">
+	<%=link_to "Questions Results","#", :id => :q_results, :class=>"span-5"%>
+	<%=link_to "Link Results","#", :id => :l_results,:class => "span-5"%>
+</div>
+<input type="hidden" name="query" id="query" value=<%=@query%> />
+<ul id="question_results"  class="span-15">
+	<input type="hidden" name="next_q_page" id="next_q_page" value="2" />
+	<%@questions_search.each_hit_with_result do|hit,question|%>
+	<li id="question_<%=question.id%>" class="span-15 question">
+		<span class="span-15 q_title append-bottom"  style='margin-bottom:15px;margin-top:5px;'>
+			<%=link_to truncate(question.title, :length=>200), question_path(question.id)%>
+		</span>
+		<span class="left userbox">
+			<%=link_to truncate(User.find(question.user_id).name, :length=>15), show_profile_path(:id => question.user_id)%>
+		</span>
+		<span class="time_ago span-5">
+			<%= " - #{date_name(question.created_at)} "%>
+		</span>
+		<%=link_to "#{question.answers.count} Answers", question_path(question.id), :class => "answer_count right append-1"%>
+	</li>
+	<%end%>
+</ul>
+<% if @questions_search.results.count >= 20%>
+	<a href="#" id="more_questions" name="more_questions" class="span-14 append-1"> Load More Questions </a>
+<%end%>
+
+<ul id="link_results"  class="span-15">
+	<input type="hidden" name="next_l_page" id="next_l_page" value="2" />
+	<%@links_search.each_hit_with_result do|hit,link|%>
+	<li id ="link_<%=link.id%>" class="span-15 link rounded-corners">
+		<span class="link_title span-15">	
+			<%= link_to link.title,link.URL, :target =>'_blank' %>
+		</span>
+		<span class="link_details span-15">
+			<%=link_to truncate(User.find(link.user_id).name, :length=>15),show_profile_path(:id => link.user_id), :class => "left link_owner"%>
+			<span class="time_ago">
+				<%=" - #{date_name(link.created_at)} "%>
+			</span>
+			<% if user_signed_in? && link.user_id == current_user.id%>
+				<%=link_to "Edit","#", :class=>"link_edit"%>
+				<%=link_to "Delete","#", :class => "link_delete"%>
+			<%end%>
+			<%if link.l_comments.count > 0%>
+				<%=link_to "#{link.l_comments.count} Comments", link_path(link.id), :class => "link_comments right" %>
+			<%else%>
+				<%=link_to "Discuss", link_path(link.id), :class => "link_comments right" %>
+			<%end%>
+		</span>
+	</li>
+	<%end%>
+</ul>
+<% if @links_search.results.count >= 20 %>
+	<a href="#" id="more_links" name="more_links" class="span-14 append-1"> Load More Links </a>
+<%end%>
+
+<%=content_tag :head do %>
+	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag "search.js"%>
+<%end%>

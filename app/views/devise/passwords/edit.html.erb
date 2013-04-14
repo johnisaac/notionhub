@@ -1,0 +1,16 @@
+<h2>Change your password</h2>
+
+<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :id=>:reset_password }) do |f| %>
+  <%= devise_error_messages! %>
+  <%= f.hidden_field :reset_password_token %>
+
+  <p><%= f.label :password, :class => "prepend-1 span-4" %><%= f.password_field :password %></p>
+
+  <p><%= f.label :password_confirmation, :class => "prepend-1 span-4" %><%= f.password_field :password_confirmation %></p>
+
+  <p><%= f.submit "Change my password" %></p>
+<% end %>
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+<%end%>

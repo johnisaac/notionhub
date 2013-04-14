@@ -1,0 +1,13 @@
+$("answer_count").update("<%=escape_javascript(@answers_count)%> Answers");		
+new Effect.Highlight($("answer_count"));
+var post_answer_div ="<div id='answer_div' class='span-15 prepend-1 prepend-top'>"+
+	"<label id='post_your_answer'>Post Your Answer</label>"+
+	"<textarea id='answer' rows='25' cols='100' class='span-14 mceEditor'></textarea><br/>"+
+	"<input type=button id='submit_answer' value='Post Your Answer' class='left' />&nbsp;&nbsp;&nbsp;&nbsp;"+
+	"<span id='char_left' class='push-6'>enter at least 15 characters</span>"+
+	"<br/><br/></div>";
+
+$("answer_banner").replace(post_answer_div);
+tinyMCE.execCommand("mceAddControl", false, "answer");
+question.post_answer();
+

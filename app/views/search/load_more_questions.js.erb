@@ -1,0 +1,18 @@
+var more_questions = "";
+<% @more_questions.each_hit_with_result do|hit,result| %>
+	more_questions = more_questions + "<li id=question_"+<%=result.id%>+" class='span-15 question'>"+
+					 "<span class='span-15 q_title append-bottom' style='margin-bottom:15px; margin-top:5px;'>"+
+					 "<%=escape_javascript(link_to truncate(result.title, :length=>200), question_path(result.id))%>"+
+   					"</span>"+
+					"<span class='left userbox'>"+
+					"<%=escape_javascript(link_to truncate(User.find(result.user_id).name, :length=>15), show_profile_path(:id => result.user_id))%>"+
+					"</span>"+
+					"<span class='time_ago span-5'> - <%=date_name(result.created_at)%></span>"+
+					"<a href='#' class='answer_count right append-1'>"+<%=result.answers.count%>+" Answers</a>"+
+					"</li>";
+<% end %>
+$("question_results").insert( { bottom: more_questions } );
+$("next_q_page").setValue(<%=@next_q_page%>);
+<% if @more_questions.results.count <= 20 %>
+	$("more_questions").remove();
+<%end%>

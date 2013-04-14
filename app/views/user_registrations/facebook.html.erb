@@ -1,0 +1,22 @@
+<div id="sign_in_using" class="span-12 rounded-corners push-5">
+	<span class="span-10 push-1">
+		<%=image_tag 'users.png', :id => "user_image"%>
+		<%=image_tag 'help.png', :id => "help_image"%>
+		<%=image_tag 'attachment.png', :id => "link_image"%>
+		<br/><br/>
+		<span id="welcome_exp">
+			<span id="sitename">NotionHub</span> is an aspiring student community to ask <%=link_to "Questions",questions_path %> and share useful <%=link_to "Links", links_path %> and help each other in their quest to achieve their dream.</span>
+		<br/><br/>
+		
+		<span id="sign_up_or_sign_in">
+			<%=link_to "Connect using Facebook","/auth/facebook", :id => :fb_signin_long, :class => "span-6 push-2"%><br/<br/>
+			<span class="span-10">
+	    	&nbsp;<span style="font-weight:bold;font-size:11px;">Not on Facebook? </span><%= link_to "signup using email", new_user_registration_path, :class => "helptext" %>
+			</span>
+		</span>
+    </span>
+</div>
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+<%end%>

@@ -1,0 +1,71 @@
+<% if !@user.nil?%>
+	<div id="profile" class="span-16">
+		<% if @user.photo.file?%>
+			<div class='span-4'>
+				<%=image_tag @user.photo.url(:medium)%>
+			</div>
+		<% else %>
+			<div class='span-4'>
+				<%=image_tag ("default.jpg")%>
+			</div>
+		<%end%>
+		<div class='span-10'>
+			<div class="span-10 profile_name">
+				<%=resource.name.titleize%>
+			</div>
+		
+			<div id="description" class="prepend-top span-10">
+				<%if !current_user.nil? || !resource.description.nil? %>
+					<div id='desc_content' class='span-9'>
+						<%=raw resource.description%>
+					</div>
+				<%end%>
+			</div>
+		
+		</div>
+	</div>
+<% end %>
+
+<br/><br/>
+
+<div id="manage" class="span-15 prepend-1">
+	<%=link_to "Questions(#{@questions.count})", "#", :id => "question_label", :class =>"span-4"%>
+	<%=link_to "Links(#{@links.count})", "#", :id => "link_label", :class =>"span-4"%>
+	<%=link_to "Answers(#{@answers.count})", "#", :id => "answer_label", :class =>"span-4"%>
+</div>
+
+<ul id="user_questions" class='span-16'>
+	<%@questions.each do|question|%>
+		<li id=question_<%=question.id%> class='question span-15 append-bottom'>
+			<%= link_to question.title,question_path(question.id), :class=>'q_title span-15 left'%><br/>
+			<span class='q_answers right'><%=question.answers.count%> Answers </span>
+			<span class='q_time_ago left'><%=date_name(question.created_at)%></span>
+		</li>
+	<%end%>	
+</ul>
+
+<ul id="user_answers" class='span-16'>
+	<%@answers.each do|answer|%>
+		<li id=answer_"+<%=answer.id%>+" class='answer span-15 left'>
+			<%= link_to truncate(strip_tags(raw(answer.content)),:length => 100),question_path(answer.question_id), :class=>'answer_title span-15 left'%><br/>
+			<span class='answer_time left'> <%=date_name(answer.created_at)%></span>
+		</li>
+	<%end%>
+</ul>
+
+<ul id="user_links" class='span-16'>
+	<%@links.each do|link|%>
+		<li id=link_"+<%=link.id%>+" class='link rounded-corners span-15 append-bottom'>
+			<%= link_to link.title,link.URL, :class=>'link_title span-15'%><br/>
+			<a href='/links/"+<%=link.id%>+"' class='link_comments right'><%=link.l_comments.count%> Comments</a>
+			<span class='link_time left'> <%=date_name(link.created_at)%></span>
+			</li>
+	<%end%>
+</ul>
+
+
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+	<%=javascript_include_tag "profile.js"%>
+<%end%>

@@ -1,0 +1,22 @@
+
+	<div id="email_body">
+		<h2 id="email_heading"> List of Applications with tomorrow's  deadline</h2>
+		<% if !@user_apps.nil?%>
+			<table id="app_list" cellpadding="0" cellspacing="0" >
+				<tr class="heading">
+					<td style="padding-bottom:10px;"> <b>University Name</b> 
+					</td>
+					<td style="padding-bottom:5px;padding-left:10px"> 	
+						<b>Deadline</b> 
+					</td>
+				</tr>
+				<%@user_apps.each do |app|%>
+					<tr>
+						<td style="padding-bottom:2px;"><%= link_to app.university,"http://localhost:3000/apps/#{app.id}"%></td>
+						<td style="padding-bottom:2px; padding-left:10px"><%= app.deadline%></td>
+					</tr>
+				<%end%>
+			</table>
+		<% end %>
+		<hr/>
+	</div>

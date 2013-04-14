@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NotionHub - Apps</title>
+  <%= stylesheet_link_tag "blueprint/screen.css",html_options = Hash["media","screen"]%>
+  <%= stylesheet_link_tag "blueprint/print.css", html_options = Hash["media","print"] %>
+  <!--[if lt IE 8]>
+	<link rel="stylesheet" type="text/css" href="stylesheets/blueprint/ie.css" />
+  <![endif]-->
+  <%= stylesheet_link_tag "application.css"%>
+  <link rel="shortcut icon" href="/images/favicon.ico" />
+  <%= csrf_meta_tag %>
+</head>
+
+<body>
+	
+	<div id="header">
+		
+		<div class='container'>
+			
+			<div id='upper_header' class='span-24'>
+				
+				<%=link_to "NOTION HUB", root_path, :id =>"logo",:class => 'span-10 left'%>
+				
+				<span class='span-14' style='margin-right:0px;'>
+					<%=link_to "Search","#", :id => :search_button, :class =>"right"%>
+					<%=text_field_tag :query, nil, :class => "right span-10"%>
+				</span>
+				
+				<div id='tagline' class='span-10 left'>
+					everything about higher education!
+				</div>
+				
+				<%=render './layouts/nav_links', :locals => { :request => request }%>	
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<div class="container prepend-top">
+			
+			<div id="content" class="span-16 first">
+				<%=yield%>
+			</div>
+			
+			<div id='sidebar' class='span-8 last'>
+				
+				<% if user_signed_in? %>
+				
+					<%=render :partial => "./layouts/create_content"%>
+					
+			 		<% if request.fullpath == new_app_path %>
+						<img src='/images/pointer.png' alt='pointer' class='pointer right append-1'/>
+						<span class='span-7 tooltip left'>
+							You can ask any question about your course, preparation tips, institute, faculty, institute location, visa, travel arrangements, placement or any doubt with regard to your higher studies.<br /> <br />Please try to give a short, appropriate title and a good description to your question to get great answers. <br/><br/> Use formatting options in the editor to post a nice looking question.
+						</span>
+					<% elsif request.fullpath == apps_path%>
+						<img src='/images/pointer.png' alt='pointer' class='pointer right append-1'/>
+						<span class='span-7 tooltip left'>
+							You can add updates to your application.<br /> <br />Updates are limited by 140 characters. <br/><br/> You can use it to add details like contact person, institute phone number etc.
+						</span>
+
+					<% end %>
+					
+				<% end %>				
+				
+			</div>
+	</div>
+	<hr class='solid'/>
+	
+	<div id="footer">
+		<%= link_to "About Us",aboutus_path%> |
+		<%= link_to "Blog","http://www.notionhub.posterous.com"%> | 
+		<%= link_to "Contact Us",contactus_path, html_options = Hash["id","contact_us"]%>
+	</div>
+
+	<div id="feedback"></div>
+	
+	<%=content_tag :head do%>
+		<script type="text/javascript">
+
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-20255658-1']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+
+		</script>
+	<%end%>
+
+</body>
+</html>

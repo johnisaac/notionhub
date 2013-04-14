@@ -1,0 +1,78 @@
+<div id="link_tab" class="span-15 prepend-1">
+	<a href="#" class="span-5" id="latest_l">Latest Links<br/><span class='helpMsg'>New Links</span></a>
+	<a href="#" class="span-5" id="top_l">Best Links<br/><span class='helpMsg'>Top Rated in last 24 hours</span></a>
+</div>
+
+<ul id="links_list" class="span-16">
+	<%@links.each do|link|%>
+		<li id ="link_<%=link.id%>" class="span-15 link rounded-corners">
+			<table class='rating span-1' cellpadding="0" cellspacing="0">
+				<% if user_signed_in? && current_user.id == link.user_id%>			
+					<tr>
+						<td>
+							<%= link_to (image_tag "up.png", options =  { :title => 'You cannot vote for your link', :class=>"left span-1 owner" }), "#"%>
+						</td>
+					</tr>
+				<%elsif user_signed_in? %>
+					<tr>
+						<td>
+							<%= link_to (image_tag "up.png", options =  { :title => 'Click this if you like the link', :class=>"left span-1  l_increase_rating" }), "#"%>
+						</td>
+					</tr>
+				<% else%>
+					<tr>
+						<td>
+							<%= link_to (image_tag "up.png", options =  { :title => 'You have to signin to vote',:class=>"left span-1 nosignin" }), "#"%>
+						</td>
+					</tr>
+				<%end%>
+				<tr>
+					<td class='link_rating' style='padding-left:10px;font-weight:bold;'>
+						<%=link.rating%>
+					</td>
+				</tr>
+				<% if user_signed_in? && current_user.id == link.user_id%>
+					<tr>
+						<td>
+							<%= link_to (image_tag "down.png", options =  { :title => 'You cannot vote for your link', :class=>"left span-1 owner " }), "#"%>					
+						</td>
+					</tr>
+				<%elsif user_signed_in?%>
+					<tr>
+						<td>
+							<%= link_to (image_tag "down.png", options =  { :title => 'Click this if you dislike the link', :class=>"left span-1 l_decrease_rating" }), "#"%>
+						</td></tr>
+				<%else%>
+					<tr><td>
+						<%= link_to (image_tag "down.png", options =  { :title => 'You have to signin to vote',:class=>"left span-1 nosignin" }), "#"%>
+					</td></tr>
+				<%end%>
+			</table>
+			
+			<span class="link_title span-13">	
+				<%= link_to truncate(link.title, :length=>120),link.URL,:target =>"_blank" %>
+			</span>
+			
+			<span class="link_details span-13 ">
+				<%=link_to truncate(User.find(link.user_id).name, :length=>15),show_profile_path(:id => link.user_id), :class => "left link_owner"%>
+				<span class="time_ago">
+					<%=" - #{date_name(link.created_at)} "%>
+				</span>
+				<% if user_signed_in? && link.user_id == current_user.id%>
+					<%=link_to "Edit","#", :class=>"link_edit"%>
+					<%=link_to "Delete","#", :class => "link_delete"%>
+				<%end%>
+				<%if link.l_comments.count > 0%>
+					<%=link_to "#{link.l_comments.count} Comments", link_path(link.id), :class => "link_comments right" %>
+				<%else%>
+					<%=link_to "Discuss", link_path(link.id), :class => "link_comments right" %>
+				<%end%>
+			</span>
+		</li>
+	<%end%>
+</ul>
+
+<ul id="top_links">
+</ul>
+
+

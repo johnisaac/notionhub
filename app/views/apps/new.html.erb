@@ -1,0 +1,35 @@
+<div id="new_application" class="span-15">
+	<h3 class="heading">Create Application</h3>
+	</h2>
+	<span class="dull">All the fields are required</span>
+	   <% if @app.errors.any? %>  
+	   <div id="errorExplanation">  
+	     <ul>  
+	    	<% @app.errors.full_messages.each do |msg| %>  
+	 			<li><%=h msg %></li>  
+			<% end %>  
+		 	 </ul>  
+		</div>  	
+	<% end %>
+	<%=form_for(@app, :html => { :class => "span-15 prepend-top" }) do|f|%>
+		<%=f.hidden_field :user_id, :value => current_user.id%>
+		<%=f.label :university,"Institute", :class => "span-2"%>
+		<%=f.text_field :university%><br/>
+		<%=f.label :department, :class => "span-2"%>
+		<%=f.text_field :department%><br/>
+		<%=f.label :degree, :class => "span-2"%>
+		<%=f.select :degree, degree_list%><br/>
+		<%=f.label :deadline,  :class => "span-2"%>
+		<%=f.date_select :deadline, options = { :date_separator => " - " ,:start_year => 2010, :end_year => 2011 }%><br/>
+		<%=f.label :status,  :class => "span-2"%>
+		<%=f.select :status, status_list%><br/>
+		<%=f.submit "Create Application", :id => :app_create%>
+		<%=link_to "Cancel",{ :controller => :apps, :action => :index}, html_options = { :method => :get, :id => :cancel_app }%>
+	<%end%>
+
+</div>
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag "new_app.js" %>
+<%end%>

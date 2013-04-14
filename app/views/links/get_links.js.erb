@@ -1,0 +1,9 @@
+var links_list = "";
+<%@links.each do|link|%>
+	links_list = links_list + "<li id=link_"+<%=link.id%>+" class='link rounded-corners span-15 append-bottom'>"+
+					 "<%=escape_javascript( link_to link.title,link.URL, :target =>'_blank', :class=>'link_title span-14')%><br/>"+
+					 "<a href='/links/"+<%=link.id%>+"' class='link_comments right'>"+<%=link.l_comments.count%>+" Comments</a>"+
+					 "<span class='link_time left'> <%=date_name(link.created_at)%></span>"+
+					 "</li>";
+<%end%>
+$("user_links").update(links_list);

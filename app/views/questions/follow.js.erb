@@ -1,0 +1,7 @@
+<% if @user_question.follow == true %>
+	$("follow_question").replace("<%=escape_javascript(link_to 'Unfollow Question','#', :id => 'unfollow_question', :class=>'rounded-corners')%>");
+<% else %>
+	$("unfollow_question").replace("<%=escape_javascript(link_to 'Follow Question','#', :id => 'follow_question', :class=>'rounded-corners')%>");
+<% end %>
+
+question.follow();

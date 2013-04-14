@@ -1,0 +1,89 @@
+var links_list = "";
+<%@links.each do|link|%>
+	links_list = links_list + "<li id=link_"+<%=link.id%>+" class='span-15 link rounded-corners'>"+
+								"<table class='rating span-1' cellpadding='0' cellspacing='0'>";
+
+	<% if user_signed_in? && current_user.id == link.user_id%>		
+		links_list = links_list + "<tr><td>"+
+		"<a href='#'><img alt='Up' class='left span-1 owner' src='/images/up.png' title='You cannot vote for your own link!' /></a>"+
+		"</td></tr>"+
+		"<tr><td class='link_rating' style='padding-left:10px;font-weight:bold;'><%=escape_javascript(link.rating.to_s)%></td></tr>"+
+		"<tr><td>"+
+		"<a href='#'><img alt='Down' class='left span-1 owner' src='/images/down.png' title='You cannot vote for your own link!' /></a>"+
+		"</td></tr>"+
+		"</table>";
+	<%elsif user_signed_in? %>
+		links_list = links_list + "<tr><td>"+
+		"<a href='#'><img alt='Up' class='left span-1 l_increase_rating' src='/images/up.png' title='Click this if you like this link!' /></a>"+
+		"</td></tr>"+
+		"<tr><td class='link_rating' style='padding-left:10px;font-weight:bold;'><%=escape_javascript(link.rating.to_s)%></td></tr>"+
+		"<tr><td>"+
+		"<a href='#'><img alt='Down' class='left span-1 l_decrease_rating' src='/images/down.png' title='Click this if you dont like this link' /></a>"+
+		"</td></tr>"+
+		"</table>";
+	<% else%>
+		links_list = links_list + "<tr><td>"+
+		"<a href='#'><img alt='Up' class='left span-1 l_increase_rating' src='/images/up.png' title='Click this if you like this link!' /></a>"+
+		"</td></tr>"+
+		"<tr><td class='link_rating' style='padding-left:10px;font-weight:bold;'><%=escape_javascript(link.rating.to_s)%></td></tr>"+
+		"<tr><td>"+
+		"<a href='#'><img alt='Down' class='left span-1 l_decrease_rating' src='/images/down.png' title='Click this if you dont like this link' /></a>"+
+		"</td></tr>"+
+		"</table>";
+	<%end%>
+
+	links_list = links_list + "<span class='link_title span-13'>"+	
+						  	  "<%=escape_javascript(link_to truncate(link.title, :length=>120),link.URL, :target =>'_blank')%>"+
+							  "</span>"+
+						  	  "<span class='link_details span-13'>"+
+							  "<%=escape_javascript( link_to truncate(User.find(link.user_id).name, :length=>15), show_profile_path(:id => link.user_id), :class => 'left link_owner' )%>"+
+						  	  "<span class='time_ago'>"+
+							  "- <%=date_name(link.updated_at)%>"+
+						  	  "</span>";
+					
+	<% if link.l_comments.count > 0 %>
+		links_list = links_list + "<%=escape_javascript(link_to link.l_comments.count.to_s+' Comments',link_path(link.id), :class=>'link_comments right')%>";
+	<% else %>
+		links_list = links_list + "<%=escape_javascript(link_to 'Discuss',link_path(link.id), :class=>'link_comments right')%>";
+	<% end %>
+
+	links_list = links_list + "</span></li>";
+
+<%end%>
+
+$("top_links").update(links_list);
+$$("#top_links .owner").each(function(b) {
+	$(b).observe("click", function(event){
+		var msg = "<div class='errorMessage span-7' style='position:absolute;padding-left:10px;z-index:1000;'> You cannot vote for your own link.<br/><a href='#' class='close'> Click on the box to close</a></div>";
+    	links.show_message(b,msg);
+		$$(".close").each(function(element){
+			links.hide_message(element);
+		});
+		event.stop();
+	});
+});
+
+$$("#top_links .nosignin").each(function(b) {
+	$(b).observe("click", function(event){
+		var msg = "<div class='errorMessage span-7' style='position:absolute;padding-left:10px;z-index:1000;'> You have to sign in before voting.<br/><a href='#' class='close'> Click on the box to close</a></div>";
+    	links.show_message(b,msg);
+		$$(".close").each(function(element){
+			links.hide_message(element);
+		});
+		event.stop();
+	});
+});
+
+$$("#top_links .l_increase_rating").each(function(element){
+	$(element).observe("click", function(event){
+		links.increase_rating(element);
+		event.stop();
+	});
+});
+
+$$("#top_links .l_decrease_rating").each(function(element){
+	$(element).observe("click", function(event){
+		links.decrease_rating(element);
+		event.stop();
+	});
+});

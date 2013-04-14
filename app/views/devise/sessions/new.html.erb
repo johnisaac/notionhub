@@ -1,0 +1,38 @@
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => "left prepend-top"}) do |f| %>
+
+	<h3 style="height:30px;background-color:#0047a6;color:white;font-weight:bold; padding-left:20px; padding-top:20px">
+		Sign In
+	</h3>
+	
+	<% flash.each do |name, msg| %>
+	  <%= content_tag :div, msg, :id => "flash_#{name}", :class => "error" if msg.is_a?(String) %>
+	<% end %>
+	
+ 	<p>
+		<%= f.label :email, :class => "span-2 prepend-1", :style => "padding-top:8px;" %>
+	    <%= f.text_field :email%>
+	</p>
+
+	<p>
+		<%= f.label :password, :class => "span-2 prepend-1", :style => "padding-top:8px;" %>
+	    <%= f.password_field :password %>
+	</p>
+
+    <p class="prepend-1">
+	    <% if devise_mapping.rememberable? -%>
+	    	<%= f.check_box :remember_me %> <%= f.label :remember_me %>
+	    <% end -%>
+    </p>
+
+    <p class="prepend-2">
+        <%= f.submit "   Sign in   " %>
+	<%- if devise_mapping.recoverable? && controller_name != 'passwords' %>
+  	    <%= link_to "Forgot your password?", new_password_path(resource_name), html_options = { :id => :forgot_password} %>
+    <% end -%>
+    </p>
+
+<% end %>
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+<%end%>

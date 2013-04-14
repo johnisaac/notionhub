@@ -1,0 +1,29 @@
+var more_links = "";
+<% @more_links.each_hit_with_result do|hit,result| %>
+	more_links = more_links + "<li id=link_"+<%=result.id%>+" class='span-15 link rounded-corners'>";
+		more_links = more_links +  "<span class='link_title span-15'>"+	
+							  	  "<%=escape_javascript(link_to result.title,result.URL, :target =>'_blank')%>"+
+	 						  	  "</span>"+
+							  	  "<span class='link_details span-15'>"+
+								  "<%=escape_javascript( link_to truncate(User.find(result.user_id).name, :length=>15), show_profile_path(:id => result.user_id), :class => 'left link_owner' )%>"+
+							  	  "<span class='time_ago'>"+
+								  "- <%=date_name(result.updated_at)%>"
+							  	  "</span>";
+	<% if user_signed_in? && result.user_id == current_user.id%>
+		more_links = more_links +"<%=escape_javascript(link_to 'Edit','#', :class=>'link_edit', :style=>'margin-left:2px;')%>"+
+					 "<%=escape_javascript(link_to 'Delete','#', :class=>'link_delete', :style=>'margin-left:2px;')%>";
+	<% end %>
+	<%if result.l_comments.count > 0%>
+		more_links = more_links + "<a href='/links/"+<%=result.id%>+"' class='link_comments right'>"+result.l_comments.count+" Comments</a>";
+	<%else%>
+		more_links = more_links + "<a href='/links/"+<%=result.id%>+"' class='link_comments right'>Discuss</a>";
+	<%end%>
+	more_links = more_links + "</span></li>";
+
+<% end %>
+$("link_results").insert( { bottom: more_links } );
+$("next_l_page").setValue(<%=@next_l_page%>);
+
+<% if @more_links.results.count <= 20 %>
+	$("more_links").remove();
+<%end%>

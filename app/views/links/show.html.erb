@@ -1,0 +1,108 @@
+<% if @link.flags == 1 %>
+<div id="link_detail" class="span-16">
+<% elsif @link.flags == 2 %>
+<div id="link_detail" class="span-16 flagged_link">
+<%end%>
+
+	<table class='rating span-1' cellpadding="0" cellspacing="0">	
+		<% if user_signed_in? && current_user.id == @link.user_id%>			
+			<tr>
+				<td>
+					<%= link_to (image_tag "up.png", options =  { :title => 'You cannot vote for your link', :class=>"left span-1 owner " }), "#"%>
+				</td>
+			</tr>
+			<tr>
+				<td class='link_rating' style='padding-left:10px;'>
+					<%=@link.rating%>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<%= link_to (image_tag "down.png", options =  { :title => 'You cannot vote for your link', :class=>"left span-1 owner " }), "#"%>
+				</td>
+			</tr>		
+		<%elsif user_signed_in?%>
+			<tr>
+				<td>
+					<%=link_to (image_tag "up.png", :title => 'Click this if you like the link', :class=>"left span-1 l_increase_rating")%>
+				</td>
+			</tr>
+			<tr>
+				<td class='link_rating' style='padding-left:10px;'>
+					<%=@link.rating%>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<%=link_to (image_tag "down.png", :title => 'Click this if you dislike the link', :class=>"left span-1 l_decrease_rating")%>
+				</td>
+			</tr>
+		<%else%>
+			<tr>
+				<td>
+					<%= link_to (image_tag "up.png", options =  { :title => 'You have to signin to vote', :class=>"left span-1 nosignin" }), "#"%>
+				</td>
+			</tr>
+			<tr>
+				<td class='link_rating' style='padding-left:10px;'>
+					<%=@link.rating%>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<%= link_to (image_tag "down.png", options = { :title => 'You have to signin to vote', :class=>"left span-1 nosignin" }), "#"%>
+				</td>
+			</tr>
+		<%end%>
+	</table>
+	
+	<%=link_to truncate(@link.title, :length=>200),@link.URL, :id => "link_content" %>
+	<% if user_signed_in? %>
+		<div id="new_comment_div">
+			<textarea id="new_comment">
+			</textarea><br/>
+			<input type="button" id="submit_comment" value ="add comment" />
+		</div>
+	<%end%>
+	<span class='right append-1' style='margin-top:-42px;'>
+		<%if !current_user.nil? && @link.user_id == current_user.id%>
+			<%=link_to "Delete",@link, :method => :delete, :class => "delete", :confirm => "Do you really want to delete this link ?"%>
+		<%elsif !current_user.nil? && @link.user_id != current_user.id%>
+		<% if @flagged.nil?%>
+			<% if @link.flags == 1%>
+				<%= link_to "Flag Link", "#", html_options = { :class => :flag, :id => :flag }%>
+				<%=hidden_field_tag :flagged,2%>
+			<%else%>
+				<%= link_to "Unflag Link", "#", html_options = { :class => :flag, :id => :flag }%>
+				<%=hidden_field_tag :flagged,1%>
+			<%end%>
+		<% else %>
+			<% if @flagged.flagged == 2%>
+				<%= link_to "Unflag Link", "#", html_options = { :class => :flag, :id => :flag }%>
+				<%=hidden_field_tag :flagged,1%>
+			<%else%>
+				<%= link_to "Flag Link", "#", html_options = { :class => :flag, :id => :flag }%>
+				<%=hidden_field_tag :flagged,2%>
+			<%end%>
+		<% end %>
+
+		<%end%>
+	</span>
+
+	<input type=hidden id="link_id" value=<%=@link.id%> />
+	<% if !user_signed_in?%>
+		<br/><br/><br/><br/>
+	<%end%>
+	<h3 class="heading" style="text-decoration: underline;">Comments</h3><span class='small' style="font: 12px 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif;text-decoration: none;">(your thoughts about the link)</span>
+	
+	<ol id="link_comments" class="span-15 prepend-top">
+		<%@link.l_comments.each do|lcomment|%>
+			<li class="link_comment span-15">
+					<span class="content"><%=h lcomment.content%></span>
+					<span class="link_user"><%=h link_to User.find(lcomment.user_id).name, "#"%></span>
+					<span class="time_ago"><%= " - #{date_name(lcomment.created_at)}"%></span>
+			</li>
+			<hr class='dull'/>
+		<%end%>
+	</ol>
+</div>

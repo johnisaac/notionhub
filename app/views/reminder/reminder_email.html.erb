@@ -1,0 +1,36 @@
+<div id="email_body">
+		<h2 id="email_heading"> List of Applications with next week deadline</h2>
+		<% if !@user_apps.nil?%>
+		<table id="app_list" cellpadding="0" cellspacing="0" >
+			<tr class="heading">
+				<td style="text-decoration:underline; padding-bottom:10px"> 
+					<b>University Name</b> 
+				</td>
+				<td style="text-decoration:underline;padding-left:10px;padding-bottom:10px"> 	
+					<b>Deadline</b> 
+				</td>
+				<td style="text-decoration:underline;padding-left:10px;padding-bottom:10px"> 	
+					<b>Status</b> 
+				</td>
+			</tr>
+			<%@user_apps.each_pair do |app_id, app_detail|%>
+				<tr>
+					<td style="padding-bottom:5px">
+						<a href=<%="http://notionhub.com/apps/#{app_detail[2]}"%> ><%= app_detail[0] %>
+				    </td>
+					<td style="padding-left:10px;padding-bottom:5px"><%= app_detail[1]%></td>
+					<%if app_detail[3] == 1%>
+						<td style="padding-left:10px;padding-bottom:5px">Applied</td>
+					<%elsif app_detail[3] == 2%>
+						<td style="padding-left:10px;padding-bottom:5px">Not Yet Applied</td>
+					<%elsif app_detail[3] == 3%>
+						<td style="padding-left:10px;padding-bottom:5px">Admitted</td>
+					<%elsif app_detail[3] == 4%>
+						<td style="padding-left:10px;padding-bottom:5px">Rejected</td>
+					<%end%>
+				</tr>
+			<%end%>
+			</table>
+		<% end %>
+		<hr/>
+</div>

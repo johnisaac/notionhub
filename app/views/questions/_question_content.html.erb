@@ -1,0 +1,62 @@
+<% if question.flags == 1%>
+	<div id="question_detail" class="span-16 left append-bottom">
+<%elsif question.flags == 2%>
+	<div id="question_detail" class="span-16 left append-bottom flagged_question">
+<%end%>
+	
+	<div id="question_title" class='span-16 last'>
+		<%= question.title%>
+	</div>
+
+	<%=render :partial =>'ratings', :locals =>{ :kind => "question", :object => question }%>
+
+	<div class='span-14 q_content last' style='word-wrap:break-word;'>
+		<%=raw question.content%>
+	</div>
+
+	<span class="span-8 left userbox push-1">
+		
+		<%=hidden_field_tag :question_id, question.id%>
+	
+		<%if question.user.photo.file?%>
+			<%=link_to image_tag(question.user.photo.url(:small),:class=>''), show_profile_path(:id => question.user_id),:style=>'position:relative; top:2px;'%>
+		<%else%>
+			<%=link_to image_tag("default_small.png"), show_profile_path(:id => question.user_id)%>
+		<%end%>
+	
+		<%= link_to truncate(question.user.name.titleize, :length => 18), show_profile_path(:id => question.user_id)%>
+	
+		<span class="q_time_ago">
+			<%=" - #{date_name(question.created_at)}"%>
+		</span>
+		
+	</span>
+		
+	<span class="right last">
+		<%if !current_user.nil? && question.user_id == current_user.id%>
+
+			<%=link_to image_tag("edit.png", :title => "Edit this question"),edit_question_path, html_options = {:class => "edit prepend-top last"}%>
+			<%=link_to image_tag("delete.png", :title => "Delete this question"),question, :method => :delete, :class => "delete prepend-top last", :confirm => "Do you really want to delete this question ?"%>
+	
+		<%elsif !current_user.nil? && question.user_id != current_user.id%>
+			<% if @flagged.nil?%>
+				<% if question.flags == 1%>
+					<%= link_to "Flag Question", "#", html_options = { :class => :flag, :id => :flag }%>
+					<%=hidden_field_tag :flagged,2%>
+				<%else%>
+					<%= link_to "Unflag Question", "#", html_options = { :class => :flag, :id => :flag }%>
+					<%=hidden_field_tag :flagged,1%>
+				<%end%>
+			<% else %>
+				<% if @flagged.flagged == 2%>
+					<%= link_to "Unflag Question", "#", html_options = { :class => :flag, :id => :flag }%>
+					<%=hidden_field_tag :flagged,1%>
+				<%else%>
+					<%= link_to "Flag Question", "#", html_options = { :class => :flag, :id => :flag }%>
+					<%=hidden_field_tag :flagged,2%>
+				<%end%>
+			<% end %>
+		<%end%>
+	</span>
+	
+</div>

@@ -1,0 +1,7 @@
+<%=link_to "Logout",destroy_session_url(current_user), :id=>"logout",:class=>"span-2 right"%>
+
+<% if request.fullpath =~ /users\/edit/i%>
+	<%=link_to "#{truncate(current_user.name, :length=>15).titleize}", edit_user_registration_path(:id => current_user.id), :id=>"user_name", :class=>"right current span-4"%>
+<% else %>
+	<%=link_to "#{truncate(current_user.name, :length=>15).titleize}", edit_user_registration_path(:id => current_user.id), :id=>"user_name", :class=>"right nav_link span-4"%>	
+<% end %>

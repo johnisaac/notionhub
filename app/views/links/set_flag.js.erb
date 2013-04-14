@@ -1,0 +1,5 @@
+<% if @userlink.flagged == 2%>
+	$("flag").replace("<span class='flagged'>You have flagged this link</span>");
+<% elsif @userlink.flagged == 1%>
+	$("flag").replace("<span class='flagged'>You have unflagged this link</span>");
+<%end%>

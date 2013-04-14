@@ -1,0 +1,30 @@
+<%=form_tag("/users",:class=>"left", :id=>"user_new", :method=>"post") do%> 
+  <%=session[:omniauth].inspect%>
+  <br/>
+  <b style="padding:8px;">
+	Please Enter your Name and Email Address
+  </b>
+  <hr/>
+ <% flash.each do |name, msg| %>
+   <%= content_tag :div, msg, :id => "flash_#{name}", :class => "error" if msg.is_a?(String) %>
+ <% end %>
+ <% if session[:omniauth]["user_info"]["name"] === nil %>
+  <p>
+	<%=label_tag :name, "Name", :class => "span-2 prepend-1", :style => "padding-top:8px;" %>
+ 	<%=text_field_tag :name %>
+  </p>
+ <%end%>
+  <p>
+	<%= label_tag :email,"Email", :class => "span-2 prepend-1", :style => "padding-top:8px;" %>
+    <%= text_field_tag :email %>
+  </p>
+
+  <p class="prepend-3">
+	<%= submit_tag "   Sign up   ",:id => :sign_up_button %>
+	<%=link_to "Cancel", new_user_session_path , html_options = { :method => :get, :id => :cancel_user }%>
+  </p>
+ <%end%>
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+<%end%>

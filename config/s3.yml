@@ -1,0 +1,14 @@
+development:
+  bucket: notionhub-dev
+  access_key_id: AKIAJXUNMKBKVOGDIBFQ
+  secret_access_key: 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
+
+test:
+  bucket: notionhub-test
+  access_key_id: AKIAJXUNMKBKVOGDIBFQ
+  secret_access_key: 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
+
+production:
+  bucket: notionhub-prod
+  access_key_id: AKIAJXUNMKBKVOGDIBFQ
+  secret_access_key: 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

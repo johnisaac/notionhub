@@ -1,0 +1,21 @@
+<% if request.fullpath =~ /users\/sign_up/i%>
+	<%=link_to "Register", new_user_registration_url, :id=>"register", :class=>"span-2  current right"%>
+<% else %>
+	<%=link_to "Register", new_user_registration_url, :id=>"register", :class=>"span-2 nav_link right"%>
+<% end %>
+
+<ul id='drop_down_span' class='right'>
+	<li>
+		<% if request.fullpath =~ /users\/sign_in/i%>
+			<%=link_to "Login","#", :id=>"login", :class=>"current span-2 right"%>
+		<% else %>
+			<%=link_to "Login","#", :id=>"login", :class=>"span-2 right"%>
+		<% end %>
+	</li>
+	<li>
+		<%=link_to " Facebook Connect",facebook_login_url, :class=>'drop_down span-4'%>
+	</li>
+	<li>
+		<%=link_to " Email",new_user_session_url, :class=>'drop_down span-4'%>
+	</li>
+</ul>

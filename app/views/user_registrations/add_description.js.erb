@@ -1,0 +1,7 @@
+var fragment = "<span id='desc_content' class='span-10'><%=escape_javascript(@user.description)%></span><a href='#' id='edit_description' class='right'>Edit Bio</a>";
+$("description").update(fragment);
+$('edit_description').observe("click", function(event1){
+	manage.add_description();
+	event1.stop();
+})
+new Effect.Highlight($("description"));

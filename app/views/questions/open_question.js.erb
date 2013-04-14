@@ -1,0 +1,80 @@
+var questions_list = "";
+<%@questions.each do|question|%>
+	questions_list = questions_list + "<li id=question_"+<%=question.id%>+" class='span-16 question'>"+
+					"<table class='rating span-1' cellpadding='0' cellspacing='0'>";
+	<% if user_signed_in? && current_user.id == question.user_id%>		
+	questions_list = questions_list+"<tr><td>"+
+					 "<%=escape_javascript(link_to (image_tag 'up.png', options =  {:title => 'You cannot vote for your question', :class=>'left span-1 owner ' }), '#')%>"+
+					 "</td></tr>";
+	<%elsif user_signed_in? %>
+	questions_list = questions_list	+ "<tr><td>"+
+	 				 "<%=escape_javascript(link_to (image_tag 'up.png', options =  {:title => 'Click this if you like the question',:class=>'left span-1 q_increase_rating ' }), '#')%>"+
+	 				 "</td></tr>";
+	<% else%>
+	questions_list = questions_list	+ "<tr><td>"+
+	 				 "<%=escape_javascript(link_to (image_tag 'up.png', options =  { :title => 'You have to signin to vote',:class=>'left span-1 nosignin ' }), '#')%>"+
+	 				 "</td></tr>";
+	<%end%>
+	
+	questions_list = questions_list	+ "<tr><td class='q_answer_rating'  style='padding-left:10px;font-weight:bold;'>"+<%=question.rating%>+"</td></tr>";
+	
+	<% if user_signed_in? && current_user.id == question.user_id%>		
+	questions_list = questions_list+"<tr><td>"+
+					 "<%=escape_javascript(link_to (image_tag 'down.png', options =  {:title => 'You cannot vote for your question', :class=>'left span-1 owner ' }), '#')%>"+
+					 "</td></tr>";
+	<%elsif user_signed_in? %>
+	questions_list = questions_list	+ "<tr><td>"+
+	 				 "<%=escape_javascript(link_to (image_tag 'down.png', options =  {:title => 'Click this if you like the question',:class=>'left span-1 q_decrease_rating ' }), '#')%>"+
+	 				 "</td></tr>";
+	<% else%>
+	questions_list = questions_list	+ "<tr><td>"+
+	 				 "<%=escape_javascript(link_to (image_tag 'down.png', options =  { :title => 'You have to signin to vote',:class=>'left span-1 nosignin ' }), '#')%>"+
+	 				 "</td></tr>";
+	<%end%>
+	
+	questions_list = questions_list	+ "</table>"+
+	 "<span class='span-15 q_title last' style='margin-bottom:15px;'><%=escape_javascript( link_to truncate(question.title, :length=>150),question_path(question.id)) %></span>"+
+	 "<span class='left userbox'><%=escape_javascript( link_to truncate(User.find(question.user_id).name, :length=>15), show_profile_path(:id => question.user_id) )%></span>"+
+	 "<span class='time_ago span-5'> - <%=date_name(question.updated_at)%></span>"+
+	 "<%=escape_javascript( link_to '0 Answers',question_path(question.id), :class => 'answer_count right append-1') %>"+
+	 "</li>";
+<%end%>	
+
+$("open_questions").update(questions_list);
+
+$$("#open_questions .owner").each(function(b) {
+	$(b).observe("click", function(event){
+		var msg = "<div class='errorMessage span-7' style='position:absolute;padding-left:10px;z-index:1000;'> You cannot vote for your own question.<br/><a href='#' class='close'> Click on the box to close</a></div>";
+    	question.show_message(b,msg);
+		$$(".close").each(function(element){
+			question.hide_message(element)
+		});
+		event.stop();
+	});
+});
+
+$$("#open_questions .nosignin").each(function(b) {
+	$(b).observe("click", function(event){
+		var msg = "<div class='errorMessage span-7' style='position:absolute;padding-left:10px;z-index:1000;'> You have to sign in before voting.<br/><a href='#' class='close'> Click on the box to close</a></div>";
+    	question.show_message(b,msg);
+		$$(".close").each(function(element){
+			question.hide_message(element)
+		});
+		event.stop();
+	});
+});
+
+$$("#open_questions .q_increase_rating").each(function(element){
+	$(element).observe("click", function(event){
+		question.increase_rating(element);
+		event.stop();
+	});
+});
+
+
+$$("#open_questions .q_decrease_rating").each(function(element){
+	$(element).observe("click", function(event){
+		question.decrease_rating(element);
+		event.stop();
+	});
+});

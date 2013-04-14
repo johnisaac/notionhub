@@ -1,0 +1,77 @@
+<div id="question_tab" class="span-16">
+	<a href="#" class="span-4" id="latest_q">Latest Questions<br/><span class='helpMsg'>New Questions</span></a>
+	<a href="#" class="span-4" id="open_q">Open Questions<br/><span class='helpMsg'>Unanswered Questions</span></a>
+	<a href="#" class="span-4" id="top_q">Best Questions<br/><span class='helpMsg'>Top Rated in last 24 hours</span></a>
+</div>
+
+<ul id="questions_list" class="span-16 first left">
+	<%@questions.each do|question|%>
+		<li id="question_<%=question.id%>" class="span-16 question">
+			<table class='rating span-1' cellpadding="0" cellspacing="0">
+				<% if user_signed_in? && current_user.id == question.user_id%>			
+					<tr>
+						<td>
+							<%= link_to (image_tag "up.png", options =  { :title => "You cannot own for your own question", :class=>"left span-1 owner " }), "#"%>
+						</td>
+					</tr>
+				<%elsif user_signed_in? %>
+					<tr>
+						<td>
+							<%= link_to (image_tag "up.png", options =  {:title => "Click this if you like this question", :class=>"left span-1  q_increase_rating" }), "#"%>
+						</td>
+					</tr>
+				<% else%>
+					<tr>
+						<td>
+							<%= link_to (image_tag "up.png", options =  { :title => "You have to signin to vote", :class=>"left span-1 nosignin" }), "#"%>
+						</td>
+					</tr>
+				<%end%>
+				<tr>
+					<td class='q_answer_rating' style='padding-left:10px;font-weight:bold;'><%=question.rating%></td>
+				</tr>
+				<% if user_signed_in? && current_user.id == question.user_id%>
+					<tr>
+						<td>
+							<%= link_to (image_tag "down.png", options =  { :title => "You cannot own for your own question", :class=>"left span-1 owner " }), "#"%>					
+						</td>
+					</tr>
+				<%elsif user_signed_in?%>
+					<tr>
+						<td>
+							<%= link_to (image_tag "down.png", options =  { :title => "Click this if you dislike this question", :class=>"left span-1 q_decrease_rating" }), "#"%>
+						</td>
+					</tr>
+				<%else%>
+					<tr>
+						<td>
+							<%= link_to (image_tag "down.png", options =  { :title => "You have to signin to vote", :class=>"left span-1 nosignin " }), "#"%>
+						</td>
+					</tr>
+				<%end%>
+			</table>
+			<span class="span-15 q_title last"  style='margin-bottom:15px;'>
+				<%=link_to truncate(question.title, :length=>150), question_path(question.id)%>
+			</span>
+			<span class="left userbox">
+				<%=link_to truncate(question.user.name, :length=>15), show_profile_path(:id => question.user_id)%>
+			</span>
+			<span class="time_ago span-5">
+				<%= " - #{date_name(question.created_at)} "%>
+			</span>
+			<%=link_to "#{question.answers.count} Answers", question_path(question.id), :class => "answer_count right append-1"%>
+		</li>		
+	<%end%>
+</ul>
+
+<ul id="open_questions" class="span-16 first left">
+</ul>
+
+<ul id="top_questions" class="span-16 first left">
+</ul>
+
+
+<%=content_tag :head do%>
+	<%= javascript_include_tag :defaults %>
+	<%= javascript_include_tag "show_question.js" %>
+<%end%>

@@ -1,0 +1,55 @@
+<table class='rating span-1' cellpadding="0" cellspacing="0">
+		<% if user_signed_in? && current_user.id == object.user_id%>			
+			<tr>
+				<td>
+					<%= link_to (image_tag "up.png", options =  { :title => "You cannot vote for your #{kind}",:class=>"left span-1 owner" }), "#"%>
+				</td>
+			</tr>
+		<%elsif user_signed_in? %>
+			<tr>
+				<td>
+					<% if kind == "answer" %>
+						<%= link_to (image_tag "up.png", options =  { :title => "Click this if you like the #{kind}", :class=>"left span-1 a_increase_rating" }), "#"%>
+					<% elsif kind == "question"%>
+						<%= link_to (image_tag "up.png", options =  { :title => "Click this if you like the #{kind}", :class=>"left span-1 q_increase_rating" }), "#"%>
+					<% end %>
+				</td>
+			</tr>
+		<% else%>
+			<tr>
+				<td>
+					<%= link_to (image_tag "up.png", options =  { :title => 'You have to signin to vote',:class=>"left span-1 nosignin" }), "#"%>
+				</td>
+			</tr>
+		<%end%>
+		
+		<tr>
+			<td class='rating' style='padding-left:10px;font-weight:bold;'>
+				<%=object.rating%>
+			</td>
+		</tr>
+		
+		<% if user_signed_in? && current_user.id == object.user_id%>
+			<tr>
+				<td>
+					<%= link_to (image_tag "down.png", options =  { :title => "You cannot vote for your #{kind}", :class=>"left span-1 owner" }), "#"%>					
+				</td>
+			</tr>
+		<%elsif user_signed_in?%>
+			<tr>
+				<td>
+					<% if kind == "answer" %>
+						<%= link_to (image_tag "down.png", options =  { :title => "Click this if you like the #{kind}", :class=>"left span-1 a_decrease_rating" }), "#"%>
+					<% elsif kind == "question"%>
+						<%= link_to (image_tag "down.png", options =  { :title => "Click this if you like the #{kind}", :class=>"left span-1 q_decrease_rating" }), "#"%>
+					<% end %>
+				</td>
+			</tr>
+		<%else%>
+			<tr>
+				<td>
+					<%= link_to (image_tag "down.png", options =  { :title => 'You have to signin to vote',:class=>"left span-1 nosignin" }), "#"%>
+				</td>
+			</tr>
+		<%end%>
+</table>
